@@ -64,7 +64,7 @@ const EmployeeForm: React.FC = () => {
     <Box
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'background.default' }}
     >
-      <Card sx={{ minWidth: 300, maxWidth: 500, boxShadow: 3, backgroundColor: '#f9f9f9' }}>
+      <Card sx={{ minWidth: 400, maxWidth: 500, boxShadow: 3, backgroundColor: '#f9f9f9' }}>
         <CardContent>
           <h2>Salary Packaging Limit Calculator</h2>
           <Formik
@@ -144,7 +144,8 @@ const EmployeeForm: React.FC = () => {
                       />
                     </Grid>
                   )}
-                  <Grid item xs={12}>
+                  {(formik.values.companyType === 'Hospital' || formik.values.companyType === 'PBI') && (
+                    <Grid item xs={12}>
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -158,6 +159,7 @@ const EmployeeForm: React.FC = () => {
                       label="Is Educated?"
                     />
                   </Grid>
+                  )}
                 </Grid>
                 <CardActions>
                   <Button
@@ -166,6 +168,7 @@ const EmployeeForm: React.FC = () => {
                     variant="contained"
                     sx={{
                       backgroundColor: 'black',
+                      mt:2,
                       color: 'white',
                       '&:hover': {
                         backgroundColor: 'rgba(0, 0, 0, 0.8)'

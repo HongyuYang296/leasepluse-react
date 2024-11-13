@@ -24,7 +24,7 @@ const Hero: React.FC = () => {
             gutterBottom
             fontSize={{ xs: '2rem', sm: '2.75rem', md: '3.5rem' }}
           >
-            Sample task website done with React
+            Dev test website done with React + Springboot
           </Typography>
           <Typography variant="body1" color="textSecondary" paragraph>
             Welcome to LeasePluse salary packaging calculator
@@ -45,14 +45,26 @@ const Hero: React.FC = () => {
             <Button
               variant="outlined"
               color="primary"
-              href="https://github.com/HongyuYang296/openAgent-react.git"
+              href="https://github.com/HongyuYang296/leasepluse-react.git"
+              target="_blank"
+              rel="noopener noreferrer"
+              startIcon={<GitHubIcon />}
+              fullWidth={isSmallScreen || isMediumScreen}
+              sx={{ py: 1.5, mb: 2, mr:2 }}
+            >
+              React Repo
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              href="https://github.com/HongyuYang296/LeasePluse-springboot.git"
               target="_blank"
               rel="noopener noreferrer"
               startIcon={<GitHubIcon />}
               fullWidth={isSmallScreen || isMediumScreen}
               sx={{ py: 1.5, mb: 2 }}
             >
-              GitHub Repo
+              SpringBoot Repo
             </Button>
           </Box>
         </Grid>
