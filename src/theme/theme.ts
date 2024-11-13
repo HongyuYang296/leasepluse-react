@@ -3,17 +3,16 @@ import { createTheme, Theme } from '@mui/material/styles';
 const theme: Theme = createTheme({
   components: {
     MuiInputLabel: {
-      // Targeting label styles
+      // Customize label styles
       styleOverrides: {
         root: {
-          color: 'black', // Set label text color to black
+          color: '#aaa', // Light grey color for inactive labels
           '&.Mui-focused': {
-            color: 'black' // Ensure the color remains black even when the input is focused
+            color: 'rgba(0, 0, 0, 0.87)' // Darker color when the TextField is focused
           }
         }
       }
     },
-
     MuiOutlinedInput: {
       styleOverrides: {
         root: {

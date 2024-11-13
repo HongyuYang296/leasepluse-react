@@ -37,7 +37,7 @@ const Hero: React.FC = () => {
               onClick={() => navigate('/SalaryCalculator')} // Use navigate to change path
               startIcon={<CalculateIcon />}
               fullWidth={isSmallScreen || isMediumScreen}
-              sx={{ py: 1.5, mr: 2 }}
+              sx={{ py: 1.5, mr: 2, mb: 2 }}
             >
               Start Calculate
             </Button>
@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
               rel="noopener noreferrer"
               startIcon={<GitHubIcon />}
               fullWidth={isSmallScreen || isMediumScreen}
-              sx={{ py: 1.5 }}
+              sx={{ py: 1.5, mb: 2 }}
             >
               GitHub Repo
             </Button>

@@ -6,6 +6,7 @@ const FormValidationSchema = Yup.object({
   employmentType: Yup.string().required('Employment type is required'),
   hoursWorked: Yup.number()
     .max(38, 'Hours worked cannot exceed 38 hours per week')
+    .min(0, 'Hours worked cannot be negative')
     .when(['companyType', 'employmentType'], ([companyType, employmentType], schema) => {
       if (companyType === 'Corporate' && employmentType === 'Part-time') {
         return schema.required('Hours worked is required for part-time Corporate employees');

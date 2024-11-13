@@ -1,5 +1,6 @@
-import React from 'react';
-import { Formik, Form } from 'formik';
+import React, { useState } from 'react';
+import { Formik, Form, FormikHelpers } from 'formik';
+import { FormValues } from '../types/formTypes';
 import {
   TextField,
   MenuItem,
@@ -10,26 +11,54 @@ import {
   FormControlLabel,
   Card,
   CardContent,
-  CardActions
+  CardActions,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography
 } from '@mui/material';
 import FormValidationSchema from '../utils/validationSchemas';
 import { calculateSalaryPackage } from '../utils/apiService';
 import { useSnackbar } from '../assets/contexts/SnackbarManager';
 
-const formatNumber = (value: number) => {
-  return new Intl.NumberFormat().format(value);
+
+const formatCurrency = (value: number | string) => {
+  if (value === '' || value === undefined || isNaN(Number(value))) return ''; 
+  return `$${new Intl.NumberFormat().format(Number(value))}`; 
 };
 
+
 const initialValues = {
-  salary: 0,
+  salary: '',
   companyType: '',
   employmentType: '',
-  hoursWorked: 0,
-  isEducated: false
+  hoursWorked: '',
+  educated: false
 };
 
 const EmployeeForm: React.FC = () => {
   const { openSnackbar } = useSnackbar();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [calculatedLimit, setCalculatedLimit] = useState<number>(0);
+
+  const handleDialogClose = () => {
+    setOpenDialog(false); // Close the dialog when the user clicks Close
+  };
+
+  // Handle form submission
+  const handleFormSubmit = async (values: FormValues, { setSubmitting, resetForm }: FormikHelpers<FormValues>) => {
+    try {
+      const result = await calculateSalaryPackage(values, openSnackbar);
+      console.log('Salary Package Calculated:', result);
+      setCalculatedLimit(result);
+      setOpenDialog(true);
+      resetForm();
+    } catch (error) {
+      console.error('Failed to calculate salary package:', error);
+    }
+    setSubmitting(false);
+  };
 
   return (
     <Box
@@ -37,22 +66,12 @@ const EmployeeForm: React.FC = () => {
     >
       <Card sx={{ minWidth: 300, maxWidth: 500, boxShadow: 3, backgroundColor: '#f9f9f9' }}>
         <CardContent>
-          <h3>Salary Calculator tool</h3>
+          <h2>Salary Packaging Limit Calculator</h2>
           <Formik
             initialValues={initialValues}
             validationSchema={FormValidationSchema}
-            onSubmit={async (values, { setSubmitting, resetForm }) => {
-              try {
-                const result = await calculateSalaryPackage(values);
-                openSnackbar('Salary Package Calculated Successfully!', 'success');
-                console.log('Salary Package Calculated:', result);
-                resetForm(); 
-              } catch (error) {
-                console.error('Failed to calculate salary package:', error);
-                openSnackbar(`Failed to calculate salary package: ${error}`, 'error');
-              }
-              setSubmitting(false); 
-            }}
+            validateOnChange={true}
+            onSubmit={handleFormSubmit}
           >
             {formik => (
               <Form>
@@ -63,11 +82,12 @@ const EmployeeForm: React.FC = () => {
                       id="salary"
                       name="salary"
                       label="Salary"
-                      type="number"
-                      value={formatNumber(formik.values.salary)} // Format large numbers
+                      type="text" // Set to text to allow formatted display with "$"
+                      value={formatCurrency(formik.values.salary)} // Display formatted value with "$"
                       onChange={e => {
-                        // Remove any formatting when setting the value in Formik
-                        formik.setFieldValue('salary', Number(e.target.value.replace(/,/g, '')));
+                        // Remove formatting symbols before saving to Formik state
+                        const value = e.target.value.replace(/[$,]/g, ''); // Remove $ and commas
+                        formik.setFieldValue('salary', value ? Number(value) : '');
                       }}
                       error={formik.touched.salary && Boolean(formik.errors.salary)}
                       helperText={formik.touched.salary && formik.errors.salary}
@@ -120,7 +140,7 @@ const EmployeeForm: React.FC = () => {
                         onChange={formik.handleChange}
                         error={formik.touched.hoursWorked && Boolean(formik.errors.hoursWorked)}
                         helperText={formik.touched.hoursWorked && formik.errors.hoursWorked}
-                        inputProps={{ max: 38 }} // Limit maximum input to 38
+                      
                       />
                     </Grid>
                   )}
@@ -128,10 +148,10 @@ const EmployeeForm: React.FC = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          id="isEducated"
-                          name="isEducated"
+                          id="educated"
+                          name="educated"
                           color="primary"
-                          checked={formik.values.isEducated}
+                          checked={formik.values.educated}
                           onChange={formik.handleChange}
                         />
                       }
@@ -161,6 +181,43 @@ const EmployeeForm: React.FC = () => {
           </Formik>
         </CardContent>
       </Card>
+      {/* Dialog to display the calculated result */}
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogTitle>Salary Package Result</DialogTitle>
+        <DialogContent
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '24px'
+          }}
+        >
+          <Typography gutterBottom sx={{ textAlign: 'center' }}>
+            The calculated salary package limit is:
+          </Typography>
+          <Card
+            sx={{
+              backgroundColor: '#f5f5f5',
+              mt: 2,
+              display: 'inline-flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              minWidth: 'fit-content'
+            }}
+          >
+            <Typography variant="h5" fontWeight="bold" color="primary" sx={{ textAlign: 'center' }}>
+              ${calculatedLimit.toFixed(2)}
+            </Typography>
+          </Card>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

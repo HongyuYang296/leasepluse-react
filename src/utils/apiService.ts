@@ -2,16 +2,19 @@ import axios from 'axios';
 import { FormValues } from '../types/formTypes';
 
 // Base URL for the API
-const API_URL = 'http://localhost:8001/api';
+const API_URL = 'http://localhost:8080/api';
 
-// Function to calculate salary packaging limit
-const calculateSalaryPackage = async (formData: FormValues) => {
+type OpenSnackbar = (message: string, type: 'success' | 'error') => void;
+
+const calculateSalaryPackage = async (formData: FormValues, openSnackbar: OpenSnackbar) => {
   try {
     const response = await axios.post(`${API_URL}/calculate`, formData);
-    return response.data; // Assuming the backend sends back the calculated limit
+    openSnackbar('Salary Package Calculated Successfully!', 'success');
+    return response.data;
   } catch (error) {
     console.error('Error while fetching salary package limit:', error);
-    throw error; // Rethrowing the error to be handled by the calling component
+    openSnackbar(`Failed to calculate salary package: ${error}`, 'error');
+    return 0; // Return 0 instead of throwing an error as the requirements said
   }
 };
 

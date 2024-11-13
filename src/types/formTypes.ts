@@ -1,7 +1,7 @@
 export interface FormValues {
-  salary: number;
+  salary: string;
   companyType: string;
   employmentType: string;
-  hoursWorked: number;
-  isEducated: boolean;
+  hoursWorked: string;
+  educated: boolean;
 }
