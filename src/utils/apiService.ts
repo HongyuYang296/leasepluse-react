@@ -2,7 +2,7 @@ import axios from 'axios';
 import { FormValues } from '../types/formTypes';
 
 // Base URL for the API
-const API_URL = 'http://localhost:8080/api';
+const API_URL = 'http://backend:8080/api';
 
 type OpenSnackbar = (message: string, type: 'success' | 'error') => void;
 
