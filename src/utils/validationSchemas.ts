@@ -12,7 +12,7 @@ const FormValidationSchema = Yup.object({
       }
       return schema.notRequired();
     }),
-  isEducated: Yup.boolean(),
+  isEducated: Yup.boolean()
 });
 
 export default FormValidationSchema;
