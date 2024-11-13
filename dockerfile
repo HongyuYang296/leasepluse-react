@@ -1,5 +1,5 @@
 # Base image
-FROM node:14 as build
+FROM node:18 as build
 
 # Set working directory
 WORKDIR /app
@@ -10,7 +10,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 # Install app dependencies
 COPY package.json ./
 COPY package-lock.json ./
-RUN npm install --silent
+RUN npm install
 
 # Add app
 COPY . ./
