@@ -1,15 +1,11 @@
 # Base image
-FROM node:18 as build
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-
-# Install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
+# Install app dependencies by copying package.json and package-lock.json
+COPY package.json package-lock.json ./
 RUN npm install
 
 # Add app
