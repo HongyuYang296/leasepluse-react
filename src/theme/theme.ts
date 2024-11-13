@@ -1,8 +1,18 @@
 import { createTheme, Theme } from '@mui/material/styles';
 
-// Create a theme instance with specific overrides and options.
 const theme: Theme = createTheme({
   components: {
+    MuiInputLabel: {  // Targeting label styles
+        styleOverrides: {
+          root: {
+            color: 'black',  // Set label text color to black
+            '&.Mui-focused': {
+              color: 'black'  // Ensure the color remains black even when the input is focused
+            }
+          }
+        }
+      },
+
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
@@ -18,6 +28,16 @@ const theme: Theme = createTheme({
         },
       },
     },
+    MuiCheckbox: {
+        styleOverrides: {
+          root: {
+            color: 'black',  // Default color
+            '&.Mui-checked': {
+              color: 'black',  // Color when the checkbox is checked
+            }
+          }
+        }
+      }
   },
 });
 
