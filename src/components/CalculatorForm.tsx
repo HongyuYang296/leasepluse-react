@@ -13,6 +13,8 @@ import {
   CardActions
 } from '@mui/material';
 import FormValidationSchema from '../utils/validationSchemas';
+import { calculateSalaryPackage } from '../utils/apiService';
+import { useSnackbar } from '../assets/contexts/SnackbarManager';
 
 const formatNumber = (value: number) => {
   return new Intl.NumberFormat().format(value);
@@ -27,6 +29,8 @@ const initialValues = {
 };
 
 const EmployeeForm: React.FC = () => {
+  const { openSnackbar } = useSnackbar();
+
   return (
     <Box
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'background.default' }}
@@ -37,9 +41,17 @@ const EmployeeForm: React.FC = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={FormValidationSchema}
-            onSubmit={values => {
-              // just print values in this stage, will implement backend call later
-              console.log(values);
+            onSubmit={async (values, { setSubmitting, resetForm }) => {
+              try {
+                const result = await calculateSalaryPackage(values);
+                openSnackbar('Salary Package Calculated Successfully!', 'success');
+                console.log('Salary Package Calculated:', result);
+                resetForm(); 
+              } catch (error) {
+                console.error('Failed to calculate salary package:', error);
+                openSnackbar(`Failed to calculate salary package: ${error}`, 'error');
+              }
+              setSubmitting(false); 
             }}
           >
             {formik => (
@@ -130,6 +142,7 @@ const EmployeeForm: React.FC = () => {
                 <CardActions>
                   <Button
                     type="submit"
+                    disabled={formik.isSubmitting}
                     variant="contained"
                     sx={{
                       backgroundColor: 'black',
