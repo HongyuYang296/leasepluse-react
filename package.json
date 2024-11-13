@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "serve": "vite preview --port 3000 --no-open",
     "lint": "eslint --fix",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"

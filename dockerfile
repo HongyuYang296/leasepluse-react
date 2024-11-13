@@ -1,21 +1,22 @@
-# Base image
-FROM node:18-alpine
+# Use the official Node.js 20 image as a base
+FROM node:20-alpine AS production
 
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Install app dependencies by copying package.json and package-lock.json
-COPY package.json package-lock.json ./
-RUN npm install
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# Add app
-COPY . ./
+# Install all dependencies
+RUN npm ci
 
-# Build the app
+COPY . .
+
+# Build the application
 RUN npm run build
 
-# Production environment
-FROM nginx:stable-alpine
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Expose port
+EXPOSE 3000
+
+# Start the app
+CMD ["npm", "run", "serve"]
