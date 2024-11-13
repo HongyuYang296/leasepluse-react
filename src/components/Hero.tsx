@@ -2,7 +2,7 @@ import React from 'react';
 import heroImage from '../assets/image/hero.png'; // Ensure the path is correct
 import { Grid, Box, Typography, Button, useMediaQuery, useTheme } from '@mui/material'; // Import necessary MUI components
 
-import GitHubIcon from '@mui/icons-material/github';
+import GitHubIcon from '@mui/icons-material/Github';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import { useNavigate } from 'react-router-dom';
 
